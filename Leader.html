@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telugu Letter PDF Tool | Public representative format</title>
+
+<style>
+body {
+  font-family: "Noto Sans Telugu", "Gautami", "Lohit Telugu", "Nirmala UI", sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  background-color: #f9fa1b;
+}
+
+/* ===== Navigation Header ===== */
+.nav-header {
+  background-color: #1e3a8a;
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.btn-nav-home {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-right: 15px;
+}
+.btn-nav-home:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+.nav-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+  color: #111827;
+}
+
+/* ===== Form Wrapper ===== */
+.form-wrapper {
+  max-width: 700px;
+  margin: 0 auto 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.input-group {
+  margin-bottom: 25px !important;
+  display: block;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #1f2937;
+}
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #333;
+  border-radius: 6px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+input:focus, textarea:focus {
+  border-color: #1e3a8a;
+  outline: none;
+}
+.readonly-box {
+  background: #f3f3f3;
+  border: 2px dashed #666;
+}
+
+/* ప్రోమో కోడ్ లేఅవుట్ */
+.promo-container {
+  display: flex;
+  gap: 10px;
+}
+.promo-box {
+  border: 2px solid #1e3a8a;
+  background: #f0f4ff;
+  flex: 1;
+}
+.btn-apply {
+  background: #1e3a8a;
+  color: white;
+  border: none;
+  padding: 0 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15px;
+}
+.btn-apply:hover {
+  background: #111827;
+}
+.promo-status {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.btn-submit {
+  background: #2e7d32;
+  color: #fff;
+  padding: 14px 35px;
+  border: none;
+  cursor: pointer;
+  display: block;
+  margin: 30px auto 10px auto;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 6px;
+  width: 100%;
+  max-width: 300px;
+}
+.btn-submit:hover {
+  background: #1b5e20;
+}
+
+/* ===== Preview Area ===== */
+#letterPreview {
+  display: none;
+  width: 210mm;
+  height: 297mm;
+  padding: 20mm;
+  padding-bottom: 32mm;
+  box-sizing: border-box;
+  background: #fff;
+  color: #000;
+  position: relative;
+  margin: 0 auto;
+}
+
+#letterPreview p {
+  margin: 0;
+  line-height: 1.8 !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* అలైన్‌మెంట్ రూల్స్ */
+.align-right { 
+  text-align: right !important; 
+}
+.align-center { 
+  text-align: center !important; 
+}
+.align-justify {
+  text-align: justify !important;
+}
+
+/* Header */
+.header p { margin: 2px 0; }
+
+/* Heading */
+#pHeading {
+  text-align: center;
+  margin: 6px 0;
+}
+
+/* Address + Salutation */
+.address p {
+  text-indent: 10mm;
+  margin: 4px 0;
+  text-align: justify;
+}
+
+.salutation {
+  text-indent: 10mm;
+  margin-top: 25px !important; 
+  margin-bottom: 4px;
+  text-align: justify;
+}
+
+.officer {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* ===== Subject ===== */
+.subject {
+  margin-top: 4px !important;
+  margin-bottom: 6px !important;
+  padding-left: 27mm;
+  text-indent: -17mm;
+  text-align: justify;
+}
+
+.subject .subject-text {
+  font-size: 15px;
+  font-weight: 500;
+  background: #FCF9ED;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+/* Body Content */
+.body-content p {
+  text-indent: 10mm;
+  margin-bottom: 8px !important;
+  text-align: justify;
+}
+
+/* Signature - ముగింపు కొద్దిగా లెఫ్ట్ సైడ్‌కు జరపబడింది */
+.signature {
+  margin-right: 30mm !important;
+}
+
+/* Footer */
+.footer {
+  position: absolute;
+  bottom: 15mm;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  text-align: center;
+  width: 100%;
+}
+.footer-line {
+  width: 80%;
+  margin: 0 auto 3px;
+  border-top: 1px solid #000;
+}
+
+@media print {
+  .nav-header, .form-wrapper, h1 {
+    display: none !important;
+  }
+  #letterPreview {
+    display: block !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="nav-header">
+  <a class="btn-nav-home" href="https://fillandprint.github.io/">Home</a>
+  <span class="nav-title">Official Letter Portal</span>
+</div>
+
+<h1>ప్రజాప్రతినిధుల లేఖ ఫార్మాట్</h1>
+
+<div class="form-wrapper">
+  <div class="input-group">
+    <label>తేదీ *</label>
+    <input type="date" id="date">
+  </div>
+
+  <div class="input-group">
+    <label>సిటీ / ప్రాంతం</label>
+    <input type="text" id="city" placeholder="హైదరాబాద్.">
+  </div>
+
+  <div class="input-group">
+    <label>హెడింగ్</label>
+    <input type="text" id="heading" placeholder="వినతి పత్రం">
+  </div>
+
+  <div class="input-group">
+    <label>గౌరవనీయులు</label>
+    <input type="text" id="respected" placeholder="శ్రీయుత గౌరవనీయులైన,">
+  </div>
+
+  <div class="input-group">
+    <label>శ్రీ / శ్రీమతి</label>
+    <input type="text" id="prefix" placeholder="శ్రీ.">
+  </div>
+
+  <div class="input-group">
+    <label>ప్రజాప్రతినిధి పేరు *</label>
+    <input type="text" id="repName" placeholder="ఎనుముల రేవంత్ రెడ్డి">
+  </div>
+
+  <div class="input-group">
+    <label>మంత్రి హోదా</label>
+    <input type="text" id="designation" placeholder="ముఖ్యమంత్రి, తెలంగాణ రాష్ట్రం">
+  </div>
+
+  <div class="input-group">
+    <input type="text" value="గారికి," readonly class="readonly-box" id="gariki">
+  </div>
+
+  <div class="input-group">
+    <label>సంబోధన</label>
+    <input type="text" id="salutation" placeholder="అయ్యా!">
+  </div>
+
+  <div class="input-group">
+    <label>విషయం</label>
+    <input type="text" id="subject" placeholder="గ్రంథాలయం ఏర్పాటు గురించి, రోడ్డు మంజూరు గురించి.">
+  </div>
+
+  <div class="input-group">
+    <label>లేఖ వివరణ (గరిష్ఠం 210 పదాలు)</label>
+    <textarea id="content" rows="14" placeholder="కొన్ని పదాలు Bold గా కావాలంటే వాటిని రెండు ** మధ్య రాయండి"></textarea>
+  </div>
+
+  <div class="input-group">
+    <label>ధన్యవాదాలు</label>
+    <input type="text" id="thankyou" placeholder="-కృతజ్ఞతలతో">
+  </div>
+
+  <div class="input-group">
+    <label>ముగింపు</label>
+    <input type="text" id="signature" placeholder="మీ విధేయులు">
+  </div>
+
+  <div class="input-group">
+    <label>Footer (optional)</label>
+    <input type="text" id="footerInput" placeholder="ఇక్కడ మీ షాప్ లేదా మీ పేరు లేదా ఫోన్ నెంబర్ ఇవ్వండి. లేదా ఖాళీగా ఉంచండి">
+  </div>
+
+  <div class="input-group">
+    <label style="color: #1e3a8a;">ప్రోమో కోడ్ (Promo Code)</label>
+    <div class="promo-container">
+      <input type="text" id="promoCode" class="promo-box" placeholder="ఉచితం కోసం NEW అని టైప్ చేయండి">
+      <button type="button" class="btn-apply" onclick="applyPromo()">Apply</button>
+    </div>
+    <div id="promoMsg" class="promo-status"></div>
+  </div>
+
+  <button class="btn-submit" onclick="processPaymentOrPromo()">Download PDF</button>
+</div>
+
+<div id="letterPreview">
+  <div class="header">
+    <p class="align-right">
+      తేదీ: <span id="pDate"></span>,
+    </p>
+    <p class="align-right" id="pCity"></p>
+  </div>
+
+  <h2 id="pHeading"></h2>
+
+  <div class="address">
+    <p id="pRespected"></p>
+    <p>
+      <span id="pPrefix"></span>
+      <span id="pRepName" class="officer"></span>
+    </p>
+    <p id="pDesignationGariki"></p>
+  </div>
+
+  <p id="pSalutation" class="salutation"></p>
+
+  <p class="subject">
+    <strong>విషయం:</strong>
+    <span id="pSubject" class="subject-text"></span>
+  </p>
+
+  <div id="pContent" class="body-content"></div>
+
+  <p class="align-center" id="pThankyou" style="font-weight: bold; margin-top: 20px;"></p>
+  <p class="signature align-right" id="pSignature" style="margin-top: 15px;"></p>
+
+  <div class="footer">
+    <div class="footer-line"></div>
+    <span id="pFooter"></span>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+const { jsPDF } = window.jspdf;
+let isPromoApplied = false;
+
+/* ===== Disable past dates ===== */
+(function lockPastDates(){
+  const dateInput = document.getElementById("date");
+  if(!dateInput) return;
+
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, "0");
+  const dd = String(today.getDate()).padStart(2, "0");
+  const todayStr = `${yyyy}-${mm}-${dd}`;
+
+  dateInput.setAttribute("min", todayStr);
+
+  dateInput.addEventListener("change", function(){
+    if(this.value < todayStr){
+      alert("Please select today or a future date only.");
+      this.value = "";
+    }
+  });
+})();
+
+function applyPromo() {
+  const promoCode = document.getElementById("promoCode").value.trim();
+  const promoMsg = document.getElementById("promoMsg");
+
+  if(promoCode === "NEW" || promoCode === "new") {
+    isPromoApplied = true;
+    promoMsg.style.color = "#2e7d32";
+    promoMsg.textContent = "ప్రోమో కోడ్ విజయవంతంగా అప్లై అయింది! ఉచిత డౌన్‌లోడ్ అందుబాటులో ఉంది.";
+  } else {
+    isPromoApplied = false;
+    promoMsg.style.color = "#d32f2f";
+    promoMsg.textContent = "తప్పుడు ప్రోమో కోడ్. దయచేసి సరైన కోడ్ ఇవ్వండి.";
+  }
+}
+
+function processPaymentOrPromo() {
+  const dateInput = document.getElementById("date");
+  const content = document.getElementById("content");
+  const repName = document.getElementById("repName").value.trim();
+
+  if(!dateInput.value){
+    alert("Please select the date.");
+    return;
+  }
+  if(!repName){
+    alert("దయచేసి ప్రజాప్రతినిధి పేరు నమోదు చేయండి.");
+    return;
+  }
+
+  const words = content.value.trim().split(/\s+/).filter(Boolean);
+  if(words.length > 210){
+    alert("You can write a maximum of 210 words only.\nYou have written " + words.length + " words.");
+    return;
+  }
+
+  const promoCode = document.getElementById("promoCode").value.trim();
+  if(isPromoApplied || promoCode === "NEW" || promoCode === "new"){
+    generatePDF();
+    return;
+  }
+
+  var options = {
+    "key": "rzp_test_dummykey123",
+    "amount": 1000, 
+    "currency": "INR",
+    "name": "Telugu Letter Service",
+    "description": "Download Official Representation Letter",
+    "handler": function (response){
+       generatePDF();
+    },
+    "prefill": {
+        "name": repName,
+        "email": "user@example.com",
+        "contact": "9999999999"
+    },
+    "theme": {
+        "color": "#1e3a8a"
+    }
+  };
+  var rzp1 = new Razorpay(options);
+  rzp1.open();
+}
+  
+async function generatePDF(){
+  const dateInput = document.getElementById("date");
+  const city = document.getElementById("city");
+  const heading = document.getElementById("heading");
+  const respected = document.getElementById("respected");
+  const prefix = document.getElementById("prefix");
+  const repName = document.getElementById("repName").value.trim();
+  const designation = document.getElementById("designation");
+  const salutation = document.getElementById("salutation");
+  const subject = document.getElementById("subject");
+  const content = document.getElementById("content");
+  const thankyou = document.getElementById("thankyou");
+  const signature = document.getElementById("signature");
+  const footerInput = document.getElementById("footerInput");
+
+  document.getElementById("pDate").textContent=dateInput.value.split("-").reverse().join("-");
+  document.getElementById("pCity").textContent=city.value;
+  document.getElementById("pHeading").textContent=heading.value;
+  document.getElementById("pRespected").textContent=respected.value;
+
+  document.getElementById("pPrefix").textContent = prefix.value ? prefix.value + " " : "";
+  document.getElementById("pRepName").textContent = repName;
+
+  document.getElementById("pDesignationGariki").innerHTML =
+    designation.value
+      ? "(" + designation.value + ") <i>గారికి,</i>"
+      : "<i>గారికి,</i>";
+
+  document.getElementById("pSalutation").textContent=salutation.value;
+  document.getElementById("pSubject").textContent=subject.value;
+  document.getElementById("pThankyou").textContent=thankyou.value;
+  document.getElementById("pSignature").textContent=signature.value;
+  document.getElementById("pFooter").textContent=footerInput.value||"";
+
+  const pContent = document.getElementById("pContent");
+  pContent.innerHTML="";
+  content.value.split("\n").forEach(line=>{
+    if(!line.trim())return;
+    const p=document.createElement("p");
+    p.classList.add("align-justify");
+    p.innerHTML=line.replace(/\*(.*?)\*/g,"<strong>$1</strong>");
+    pContent.appendChild(p);
+  });
+
+  const letterPreview = document.getElementById("letterPreview");
+  letterPreview.style.display="block";
+
+  try{
+    const canvas=await html2canvas(letterPreview,{scale:2});
+    const pdf = new jsPDF({
+      orientation: "p",
+      unit: "mm",
+      format: "a4"
+    });
+    pdf.addImage(canvas,"PNG",0,0,210,297);
+    
+    const safeFileName = repName.replace(/[^a-zA-Z0-9అ-ఱూ-౯ ]/g, "").replace(/\s+/g, "_");
+    pdf.save(`${safeFileName}_లేఖ.pdf`);
+  }catch(e){
+    alert("PDF generation failed. Please try again.");
+    console.error(e);
+  }finally{
+    letterPreview.style.display="none";
+  }
+}
+</script>
+
+</body>
+</html>
