@@ -11,16 +11,18 @@ body {
   font-size: 16px;
   margin: 0;
   padding: 0;
-  background-color: #f9fa1b;
+  background-color: #ffffff; /* Changed from yellow to white */
 }
 
-/* ===== Navigation Header ===== */
+/* ===== Navigation Header (Fixed Left Alignment) ===== */
 .nav-header {
   background-color: #1e3a8a;
   color: white;
   padding: 12px 20px;
   display: flex;
   align-items: center;
+  justify-content: flex-start; 
+  gap: 12px;                  
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   position: sticky;
   top: 0;
@@ -37,7 +39,10 @@ body {
   text-decoration: none;
   cursor: pointer;
   transition: background 0.2s;
-  margin-right: 15px;
+  margin: 0;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
 }
 .btn-nav-home:hover {
   background-color: rgba(255, 255, 255, 0.25);
@@ -45,6 +50,8 @@ body {
 .nav-title {
   font-size: 16px;
   font-weight: bold;
+  white-space: nowrap;
+  margin: 0;
 }
 
 h1 {
@@ -91,6 +98,18 @@ input:focus, textarea:focus {
   border: 2px dashed #666;
 }
 
+/* Global button reset */
+button {
+  background: #2e7d32;
+  color: #fff;
+  padding: 12px 28px;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
 /* ప్రోమో కోడ్ లేఅవుట్ */
 .promo-container {
   display: flex;
@@ -120,6 +139,7 @@ input:focus, textarea:focus {
   font-weight: bold;
 }
 
+/* Download PDF Button Layout */
 .btn-submit {
   background: #2e7d32;
   color: #fff;
@@ -258,7 +278,7 @@ input:focus, textarea:focus {
 <body>
 
 <div class="nav-header">
-  <a class="btn-nav-home" href="https://fillandprint.github.io/">Home</a>
+  <button type="button" class="btn-nav-home" onclick="location.href='https://fillandprint.github.io/'">Home</button>
   <span class="nav-title">Official Letter Portal</span>
 </div>
 
@@ -343,7 +363,7 @@ input:focus, textarea:focus {
     <div id="promoMsg" class="promo-status"></div>
   </div>
 
-  <button class="btn-submit" onclick="processPaymentOrPromo()">Download PDF</button>
+  <button type="button" class="btn-submit" onclick="processPaymentOrPromo()">Download PDF</button>
 </div>
 
 <div id="letterPreview">
@@ -391,8 +411,27 @@ input:focus, textarea:focus {
 const { jsPDF } = window.jspdf;
 let isPromoApplied = false;
 
-/* ===== Disable past dates ===== */
-(function lockPastDates(){
+// Auto-Save ఫీల్డ్ ఐడీల జాబితా
+const fields = ['date', 'city', 'heading', 'respected', 'prefix', 'repName', 'designation', 'salutation', 'subject', 'content', 'thankyou', 'signature', 'footerInput'];
+
+/* ===== 1. బ్రౌజర్ ఆటో-సేవ్ మరియు లోడ్ లాజిక్ ===== */
+window.addEventListener('DOMContentLoaded', () => {
+  fields.forEach(fieldId => {
+    const savedValue = localStorage.getItem('rep_' + fieldId); // 'rep_' ప్రిఫిక్స్ తో సేవ్ అవుతుంది
+    if (savedValue) {
+      document.getElementById(fieldId).value = savedValue;
+    }
+    
+    // యూజర్ డేటా ఎంటర్ చేస్తున్నప్పుడు ఆటోమేటిక్‌గా సేవ్ అవుతుంది
+    document.getElementById(fieldId).addEventListener('input', (e) => {
+      localStorage.setItem('rep_' + fieldId, e.target.value);
+    });
+  });
+  
+  lockPastDates();
+});
+
+function lockPastDates(){
   const dateInput = document.getElementById("date");
   if(!dateInput) return;
 
@@ -410,7 +449,7 @@ let isPromoApplied = false;
       this.value = "";
     }
   });
-})();
+}
 
 function applyPromo() {
   const promoCode = document.getElementById("promoCode").value.trim();
